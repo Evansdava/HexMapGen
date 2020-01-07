@@ -1,6 +1,6 @@
 Welcome to HexMapGen
 
-##How it Works:
+## How it Works:
 
 Each hex on the map is an object of the hex class. The hex object has several properties:
 
