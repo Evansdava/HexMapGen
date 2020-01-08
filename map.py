@@ -67,17 +67,34 @@ class Map():
                     except IndexError:
                         pass
 
+    def generate_forests(self):
+        """Checks if random tiles or their neighbors are forests"""
+        forests = []
+        for _ in range(int(self.len / 10)):
+            print(self)
+            current_hex = choice(self.hexes)
+            if random() < 0.10:
+                current_hex.terrain = "F"
+                forests.append(current_hex)
+
+        for tile in forests:
+            for neighbor in tile.check_neighbors():
+                print(self)
+                if random() < 0.20:
+                    neighbor.terrain = "F"
+                    forests.append(neighbor)
+
     def generate_rivers(self):
         """First checks if a river starts in an edge hex, then extends any"""
         current_hex = self.hexes[0]
         river_starts = []
         while current_hex.MR is not None:
-            if random() < 0.02:
+            if random() < 0.01:
                 current_hex.terrain = "W"
                 river_starts.append(current_hex)
             current_hex = current_hex.MR
         while current_hex.BL is not None:
-            if random() < 0.02:
+            if random() < 0.01:
                 current_hex.terrain = "W"
                 river_starts.append(current_hex)
             if current_hex.BR is None:
@@ -85,12 +102,12 @@ class Map():
             else:
                 current_hex = current_hex.BR
         while current_hex.ML is not None:
-            if random() < 0.02:
+            if random() < 0.01:
                 current_hex.terrain = "W"
                 river_starts.append(current_hex)
             current_hex = current_hex.ML
         while current_hex.TR is not None:
-            if random() < 0.02:
+            if random() < 0.01:
                 current_hex.terrain = "W"
                 river_starts.append(current_hex)
             if current_hex.TL is None:
@@ -117,5 +134,6 @@ class Map():
 
 if __name__ == '__main__':
     map = Map(29, 29)
+    map.generate_forests()
     map.generate_rivers()
     print(map)
