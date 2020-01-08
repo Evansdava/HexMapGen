@@ -17,7 +17,7 @@ class Hex():
 
     def __str__(self):
         """Return a string representation of this hex"""
-        return f"{self.id}"
+        return f"{self.terrain}"
 
     def connect(self, side, other):
         """Change the references of two hexes to match each other"""
@@ -40,3 +40,32 @@ class Hex():
         elif side == "BL":
             self.BL = other
             other.TR = self
+
+    def get_neighbors(self):
+        """Return a tuple of all adjacent tiles"""
+        return (self.MR, self.BR, self.BL, self.ML, self.TL, self.TR)
+
+    def check_neighbors(self, keys=("."), exclude=False):
+        """Return the neighbors of this hex that match, or don't, the key"""
+        neighbors = []
+        for tile in self.get_neighbors():
+            if tile is None:
+                if exclude:
+                    neighbors.append(tile)
+            else:
+                if tile.terrain in keys and not exclude:
+                    neighbors.append(tile)
+                elif tile.terrain not in keys and exclude:
+                    neighbors.append(tile)
+        return neighbors
+
+    def get_direction(self, dir):
+        """Returns a tuple of neighbors in a certain direction (u/d/l/r)"""
+        if dir == "u":
+            return (self.ML, self.TL, self.TR, self.MR)
+        if dir == "d":
+            return (self.ML, self.BL, self.BR, self.MR)
+        if dir == "r":
+            return (self.TR, self.MR, self.BR)
+        if dir == "l":
+            return (self.BL, self.ML, self.TL)
