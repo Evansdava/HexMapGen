@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     {% for hex in map.hexes %}
         {% if hex.ML == None %}
             {% if hex.TL == None %}
@@ -25,12 +25,13 @@
                 {% endif %}
             {%- endmacro %}
             <div class="top" {{color(hex.terrain)}}></div>
-            <div class="middle" {{color(hex.terrain)}}>{{hex}}</div>
+            <div class="middle" {{color(hex.terrain)}}></div>
             <div class="bottom" {{color(hex.terrain)}}></div>
         </div>
         {% if hex.MR == None %}
             </div>
+            <br>
         {% endif %}
     {% endfor %}
 </div>
-{% endblock content %}
+{% endblock %}

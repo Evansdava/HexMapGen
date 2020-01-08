@@ -5,12 +5,18 @@ from random import random, choice
 class Map():
     """The class for an overall map made of hexes"""
 
-    def __init__(self, length=10, width=10):
+    def __init__(self, length=15, width=15,
+                 for_chance=0.1, riv_chance=0.02,
+                 road_chance=0.02, build_chance=0.2):
         """Initialize values from which to generate terrain"""
-        self.length = length
-        self.width = width
+        self.length = int(length)
+        self.width = int(width)
         self.hexes = []
         self.len = 0
+        self.for_chance = float(for_chance)
+        self.riv_chance = float(riv_chance)
+        self.road_chance = float(road_chance)
+        self.build_chance = float(build_chance)
         self.generate()
 
     def __str__(self):
@@ -124,21 +130,21 @@ class Map():
         for _ in range(int(self.len / 10)):
             # print(self)
             current_hex = choice(self.hexes)
-            if random() < 0.10:
+            if random() < self.for_chance:
                 current_hex.terrain = "F"
                 forests.append(current_hex)
 
         for tile in forests:
             for neighbor in tile.check_neighbors():
                 # print(self)
-                if random() < 0.20:
+                if random() < self.for_chance * 1.5:
                     neighbor.terrain = "F"
                     forests.append(neighbor)
         return forests
 
     def generate_rivers(self):
         """First checks if a river starts in an edge hex, then extends any"""
-        river_starts = self.edge_crawl("W", 0.01)
+        river_starts = self.edge_crawl("W", self.riv_chance)
         rivers = river_starts.copy()
 
         for river in river_starts:
@@ -154,7 +160,7 @@ class Map():
 
     def generate_roads(self):
         """Chooses an edge tile and extends in a random direction"""
-        road_starts = self.edge_crawl("R", 0.025)
+        road_starts = self.edge_crawl("R", self.road_chance)
         roads = road_starts.copy()
 
         for road in road_starts:
@@ -199,7 +205,7 @@ class Map():
         for structure in structures:
             tiles = structure.check_neighbors(("R", "W", "B"), True)
             for tile in tiles:
-                if random() < 0.20:
+                if random() < self.build_chance:
                     # print(self)
                     tile.terrain = "B"
                     buildings.append(tile)
