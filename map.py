@@ -30,6 +30,52 @@ class Map():
                 count += 1
         return string
 
+    def edge_crawl(self, key, chance):
+        """Travels around edges and starts features"""
+        current_hex = self.hexes[0]
+        starts = []
+        while current_hex.MR is not None:
+            if random() < chance:
+                current_hex.terrain = key
+                starts.append(current_hex)
+            current_hex = current_hex.MR
+        while current_hex.BL is not None:
+            if random() < chance:
+                current_hex.terrain = key
+                starts.append(current_hex)
+            if current_hex.BR is None:
+                current_hex = current_hex.BL
+            else:
+                current_hex = current_hex.BR
+        while current_hex.ML is not None:
+            if random() < chance:
+                current_hex.terrain = key
+                starts.append(current_hex)
+            current_hex = current_hex.ML
+        while current_hex.TR is not None:
+            if random() < chance:
+                current_hex.terrain = key
+                starts.append(current_hex)
+            if current_hex.TL is None:
+                current_hex = current_hex.TR
+            else:
+                current_hex = current_hex.TL
+
+        return starts
+
+    def check_edge(self, tile):
+        """Checks which edge a tile has and returns the opposite direction"""
+        current_hex = tile
+        if current_hex.ML is None:
+            direction = "r"
+        elif current_hex.MR is None:
+            direction = "l"
+        elif current_hex.BL is None:
+            direction = "u"
+        elif current_hex.TL is None:
+            direction = "d"
+        return direction
+
     def generate(self):
         """Main function to create map"""
         for row in range(self.length):
@@ -83,57 +129,83 @@ class Map():
                 if random() < 0.20:
                     neighbor.terrain = "F"
                     forests.append(neighbor)
+        return forests
 
     def generate_rivers(self):
         """First checks if a river starts in an edge hex, then extends any"""
-        current_hex = self.hexes[0]
-        river_starts = []
-        while current_hex.MR is not None:
-            if random() < 0.01:
-                current_hex.terrain = "W"
-                river_starts.append(current_hex)
-            current_hex = current_hex.MR
-        while current_hex.BL is not None:
-            if random() < 0.01:
-                current_hex.terrain = "W"
-                river_starts.append(current_hex)
-            if current_hex.BR is None:
-                current_hex = current_hex.BL
-            else:
-                current_hex = current_hex.BR
-        while current_hex.ML is not None:
-            if random() < 0.01:
-                current_hex.terrain = "W"
-                river_starts.append(current_hex)
-            current_hex = current_hex.ML
-        while current_hex.TR is not None:
-            if random() < 0.01:
-                current_hex.terrain = "W"
-                river_starts.append(current_hex)
-            if current_hex.TL is None:
-                current_hex = current_hex.TR
-            else:
-                current_hex = current_hex.TL
+        river_starts = self.edge_crawl("W", 0.01)
+        rivers = river_starts.copy()
 
-        for start in river_starts:
-            current_hex = start
-            if current_hex.ML is None:
-                direction = "r"
-            elif current_hex.MR is None:
-                direction = "l"
-            elif current_hex.BL is None:
-                direction = "u"
-            elif current_hex.TL is None:
-                direction = "d"
+        for river in river_starts:
+            direction = self.check_edge(river)
+            current_hex = river
 
             while current_hex is not None:
                 print(self)
                 current_hex.terrain = "W"
-                current_hex = choice(current_hex.get_direction(direction))
+                rivers.append(current_hex)
+                current_hex = choice(current_hex.get_direction(direction))[0]
+        return rivers
+
+    def generate_roads(self):
+        """Chooses an edge tile and extends in a random direction"""
+        road_starts = self.edge_crawl("R", 0.025)
+        roads = road_starts.copy()
+
+        for road in road_starts:
+            direction = self.check_edge(road)
+            if direction == "u":
+                options = ("TL", "TR")
+            elif direction == "d":
+                options = ("BL", "BR")
+            else:
+                options = None
+            straight = False
+            path = choice(road.get_direction(direction))[1]
+            current_hex = road
+
+            if options is not None:
+                if random() < 0.50:
+                    path = choice(options)
+                else:
+                    path = options
+                    straight = True
+
+            if straight:
+                while current_hex is not None:
+                    for direction in path:
+                        if current_hex is not None:
+                            print(self)
+                            current_hex.terrain = "R"
+                            roads.append(current_hex)
+                            current_hex = current_hex.get_direction(direction)
+            else:
+                while current_hex is not None:
+                    print(self)
+                    current_hex.terrain = "R"
+                    roads.append(current_hex)
+                    current_hex = current_hex.get_direction(path)
+        return roads
+
+    def generate_buildings(self, roads):
+        """Makes buildings along each road and each building"""
+        structures = roads.copy()
+        buildings = []
+        for structure in structures:
+            tiles = structure.check_neighbors(("R", "W", "B"), True)
+            for tile in tiles:
+                if random() < 0.20:
+                    print(self)
+                    tile.terrain = "B"
+                    buildings.append(tile)
+                    structures.append(tile)
+        return buildings
 
 
 if __name__ == '__main__':
     map = Map(29, 29)
     map.generate_forests()
     map.generate_rivers()
+    roads = map.generate_roads()
+    map.generate_buildings(roads)
     print(map)

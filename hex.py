@@ -50,7 +50,7 @@ class Hex():
         neighbors = []
         for tile in self.get_neighbors():
             if tile is None:
-                if exclude:
+                if exclude and keys == ("."):
                     neighbors.append(tile)
             else:
                 if tile.terrain in keys and not exclude:
@@ -62,10 +62,26 @@ class Hex():
     def get_direction(self, dir):
         """Returns a tuple of neighbors in a certain direction (u/d/l/r)"""
         if dir == "u":
-            return (self.ML, self.TL, self.TR, self.MR)
+            return ((self.ML, "ML"), (self.TL, "TL"),
+                    (self.TR, "TR"), (self.MR, "MR"))
         if dir == "d":
-            return (self.ML, self.BL, self.BR, self.MR)
+            return ((self.ML, "ML"), (self.BL, "BL"),
+                    (self.BR, "BR"), (self.MR, "MR"))
         if dir == "r":
-            return (self.TR, self.MR, self.BR)
+            return ((self.TR, "TR"), (self.MR, "ML"), (self.BR, "BR"))
         if dir == "l":
-            return (self.BL, self.ML, self.TL)
+            return ((self.BL, "BL"), (self.ML, "ML"), (self.TL, "TL"))
+
+        # Or returns a particular direction, if requested
+        if dir == "MR":
+            return self.MR
+        if dir == "BR":
+            return self.BR
+        if dir == "BL":
+            return self.BL
+        if dir == "ML":
+            return self.MR
+        if dir == "TL":
+            return self.TL
+        if dir == "TR":
+            return self.TR
