@@ -113,11 +113,16 @@ class Map():
                     except IndexError:
                         pass
 
+        self.generate_forests()
+        self.generate_rivers()
+        roads = self.generate_roads()
+        self.generate_buildings(roads)
+
     def generate_forests(self):
         """Checks if random tiles or their neighbors are forests"""
         forests = []
         for _ in range(int(self.len / 10)):
-            print(self)
+            # print(self)
             current_hex = choice(self.hexes)
             if random() < 0.10:
                 current_hex.terrain = "F"
@@ -125,7 +130,7 @@ class Map():
 
         for tile in forests:
             for neighbor in tile.check_neighbors():
-                print(self)
+                # print(self)
                 if random() < 0.20:
                     neighbor.terrain = "F"
                     forests.append(neighbor)
@@ -141,7 +146,7 @@ class Map():
             current_hex = river
 
             while current_hex is not None:
-                print(self)
+                # print(self)
                 current_hex.terrain = "W"
                 rivers.append(current_hex)
                 current_hex = choice(current_hex.get_direction(direction))[0]
@@ -175,13 +180,13 @@ class Map():
                 while current_hex is not None:
                     for direction in path:
                         if current_hex is not None:
-                            print(self)
+                            # print(self)
                             current_hex.terrain = "R"
                             roads.append(current_hex)
                             current_hex = current_hex.get_direction(direction)
             else:
                 while current_hex is not None:
-                    print(self)
+                    # print(self)
                     current_hex.terrain = "R"
                     roads.append(current_hex)
                     current_hex = current_hex.get_direction(path)
@@ -195,7 +200,7 @@ class Map():
             tiles = structure.check_neighbors(("R", "W", "B"), True)
             for tile in tiles:
                 if random() < 0.20:
-                    print(self)
+                    # print(self)
                     tile.terrain = "B"
                     buildings.append(tile)
                     structures.append(tile)
@@ -204,8 +209,8 @@ class Map():
 
 if __name__ == '__main__':
     map = Map(29, 29)
-    map.generate_forests()
-    map.generate_rivers()
-    roads = map.generate_roads()
-    map.generate_buildings(roads)
+    # map.generate_forests()
+    # map.generate_rivers()
+    # roads = map.generate_roads()
+    # map.generate_buildings(roads)
     print(map)
