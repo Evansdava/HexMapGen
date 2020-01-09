@@ -12,7 +12,26 @@
                 <p>Please insert values below, or leave them as default, and a map will be generated using them.</p>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row">
+            <div class="col-md-auto">
+                <p>Forests are green, rivers are blue, roads are orange, and buildings are red.</p>
+                <ul>
+                    <li>
+                        <p>Forests can spawn anywhere, and are more likely to spawn next to other forests</p>
+                    </li>
+                    <li>
+                        <p>Rivers spawn from an edge, and meander across the map afterwards. Rivers can overwrite forests that are in their path.</p>
+                    </li>
+                    <li>
+                        <p>Roads spawn from an edge and follow straight lines to another edge. Roads can overwrite rivers and forests in their path.</p>
+                    </li>
+                    <li>
+                        <p>Buildings spawn next to roads or other buildings, and can overwrite forests, but not rivers or roads.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-5 pb-5">
             <form action="/map">
                 <div class="form-group">
                     <label for="length">Length (Number of rows)</label>
