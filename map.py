@@ -5,10 +5,11 @@ from random import random, choice
 class Map():
     """The class for an overall map made of hexes"""
 
-    def __init__(self, length=15, width=15,
+    def __init__(self, name="", length=15, width=15,
                  for_chance=0.1, riv_chance=0.02,
                  road_chance=0.02, build_chance=0.2):
         """Initialize values from which to generate terrain"""
+        self.name = name
         self.length = int(length)
         self.width = int(width)
         self.hexes = []

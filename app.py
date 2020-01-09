@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
+import requests
+import os
+import redis
 from map import Map
 
+redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis = redis.from_url(redis_url)
 app = Flask(__name__)
 
 
@@ -13,6 +18,9 @@ def index():
 @app.route('/map')
 def show_map():
     """Create and display map based on user-input settings"""
+    r = requests.get("http://uzby.com/api.php", {'min': 3, 'max': 12})
+
+    name = str(r.content.decode("utf-8"))
     length = request.args.get('length')
     width = request.args.get('width')
     f_chance = request.args.get('f_chance')
@@ -33,6 +41,12 @@ def show_map():
     if b_chance == "" or b_chance is None:
         b_chance = 0.20
 
-    map = Map(length, width, f_chance, ri_chance, ro_chance, b_chance)
+    map = Map(name, length, width, f_chance, ri_chance, ro_chance, b_chance)
     print(map)
     return render_template('map.html', map=map)
+
+
+# @app.route('/map/save/<map_name>')
+# def save_map(map_name):
+#     """Save the current map to the redis database"""
+#     redis.set(map_name, map)

@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container-fluid">
+    <h1 class="p-3"><input type="text" name="name" id="name" value="{{map.name}}"></h1>
     {% for hex in map.hexes %}
         {% if hex.ML == None %}
             {% if hex.TL == None %}

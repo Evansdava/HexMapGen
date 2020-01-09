@@ -1,4 +1,6 @@
-Welcome to HexMapGen
+# Welcome to HexMapGen
+
+This is a hex-based map generator for making small-scale battlemaps as would be used in Dungeons and Dragons, Lancer, or other tabletop RPGs.
 
 ## How it Works:
 
