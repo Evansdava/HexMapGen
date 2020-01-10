@@ -2,37 +2,12 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1 class="p-3"><input type="text" name="name" id="name" value="{{map.name}}"></h1>
-    {% for hex in map.hexes %}
-        {% if hex.ML == None %}
-            {% if hex.TL == None %}
-                <div class="hex-row">
-            {% else %}
-                <div class="hex-row even">
-            {% endif %}
-        {% endif %}
-        <div class="hex">
-            {% macro color(key) -%}
-                {% if key == "F" %}
-                    style="--bg-color: green;"
-                {% elif key == "W" %}
-                    style="--bg-color: deepskyblue;"
-                {% elif key == "R" %}
-                    style="--bg-color: orange;"
-                {% elif key == "B" %}
-                    style="--bg-color: darkred;"
-                {% elif key == "." %}
-                    style="--bg-color: lightgray;"
-                {% endif %}
-            {%- endmacro %}
-            <div class="top" {{color(hex.terrain)}}></div>
-            <div class="middle" {{color(hex.terrain)}}></div>
-            <div class="bottom" {{color(hex.terrain)}}></div>
-        </div>
-        {% if hex.MR == None %}
-            </div>
-            <br>
-        {% endif %}
-    {% endfor %}
+    <form action="/map/save/{{map.name}}" method="POST">
+        {% include 'partials/map_display.html' %}
+        <br>
+        <br>
+        <button class="btn btn-primary m-4" type="submit">Save Map</button>
+    </form>
+    <button class="btn btn-outline-primary ml-4 mb-2"onClick="window.location.reload();">Generate New with These Settings</button>
 </div>
 {% endblock %}
