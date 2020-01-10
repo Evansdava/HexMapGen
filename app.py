@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 import os
+import sys
 import pickle
 import redis
 from map import Map
@@ -9,6 +10,7 @@ from map import Map
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 redis = redis.from_url(redis_url)
 app = Flask(__name__)
+sys.setrecursionlimit(2000)
 
 # Global variable to track the currently displayed map
 # Bad practice perhaps, but a simple way to pass data between routes
