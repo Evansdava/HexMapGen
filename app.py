@@ -115,7 +115,6 @@ def edit_map(map_name):
     """Edit the name of a map and save it"""
     global current_map
     current_map.name = request.form.get("name")
-    # redis.rename(map_name, current_map.name)
 
     # redis.rename() is supposed to implicitly do this, but wasn't working
     redis.set(current_map.name, pickle.dumps(current_map))

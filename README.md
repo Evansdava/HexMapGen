@@ -45,6 +45,11 @@ Though it's possible to input a value higher than 1, it may cause erroneous beha
 1. Buildings are represented in red, spawn next to roads or other buildings, and can overwrite forests, but not rivers or roads. By default, they have a 20% chance to spawn on a square adjacent to a road or other building.
 1. Anywhere without other terrain is gray
 
+## Known Issues:
+
+* Maps larger than 30 hexes wide will be displayed incorrectly, though this can be fixed by zooming the browser out
+* Occasionally on the Heroku deployment, saving a map will not work correctly, instead generating a new map with the same name
+
 ## Technologies used:
 
 This project was written in Python 3 on a Flask development server, with Jinja2 templating to display maps and Bootstrap 4 for formatting.
