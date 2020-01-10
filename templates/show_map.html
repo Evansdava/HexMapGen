@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container-fluid">
+    <!-- Submitting the form changes the name, the delete button is a redirect -->
     <form action="/map/edit/{{map.name}}" method="POST">
         <button class="btn btn-outline-primary ml-3 mt-2" type="submit">Rename</button>
         {% include 'partials/map_display.html' %}

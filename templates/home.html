@@ -2,16 +2,19 @@
 
 {% block content %}
     <div class="container">
+        <!-- Title -->
         <div class="row mt-5">
             <div class="d-inline-flex col-md-12 justify-content-center">
                 <h1 class="text-center">Welcome to HexMapGen!</h1>
             </div>
         </div>
+        <!-- Instructions -->
         <div class="row mt-3">
             <div class="col-md-auto">
                 <p>Please insert values below, or leave them as default, and a map will be generated using them.</p>
             </div>
         </div>
+        <!-- Description -->
         <div class="row">
             <div class="col-md-auto">
                 <p>Forests are green, rivers are blue, roads are orange, and buildings are red.</p>
@@ -31,6 +34,7 @@
                 </ul>
             </div>
         </div>
+        <!-- Form with each of the settings, pre-filled to defaults -->
         <div class="row mt-5 pb-5">
             <form action="/map">
                 <div class="form-group">
@@ -57,7 +61,7 @@
                     <label for="b_chance">Building Chance (Chance to spawn a building next to a road, or another building)</label>
                     <input class="form-control" id="b_chance" name="b_chance" value="0.20" type="text">
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-primary" type="submit">Generate</button>
             </form>
         </div>
     </div>
