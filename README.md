@@ -8,6 +8,18 @@ It is currently [live on Heroku](https://hexmapgen.herokuapp.com) (it may take a
 Once downloaded, set up a virtual environment (`python3 -m venv env`) and install the requirements (`pip3 install requirements.txt`).
 From there, you can host the server locally with the command `flask run`.
 
+Alternately, you can build it with Docker!
+After downloading the files with `git clone`, build the container with
+```docker build -t hmg-image .```
+
+And then run it:
+```docker run --rm --name hmg-container hmg-image```
+(Both `hmg-image` and `hmg-container` are suggestions and can be replaced with names of your choice)
+
+To save space, you can delete the images created by this with
+```docker images -a | grep "hmg" | awk '{print $3}' | xargs docker rmi```
+
+
 The home page (which also has instructions and descriptions) provides several options to adjust how the map is generated. The impacts of these are described later, in the [How it Works](#how-it-works) section. These options can be left as default or changed to suit your liking.
 
 Once you've set some options, click "Generate" and a map will be made using those options.
